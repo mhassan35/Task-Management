@@ -13,10 +13,10 @@ export interface ListViewProps {
   tasks: Task[]
 }
 
-// export interface TaskFormProps {
-//   onClose: () => void
-//   onSubmit: (task: Omit<Task, "id">) => Promise<any>
-// }
+export interface TaskFormProps {
+  onClose: () => void
+  onSubmit: (task: Omit<Task, "id">) => Promise<any>
+}
 
 
 
