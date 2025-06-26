@@ -3,7 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation"
 import { RiDeleteBin6Line, RiKanbanView2 } from "react-icons/ri"
 import { FaListUl } from "react-icons/fa"
-import TaskForm from "@/app/form/page"
+import TaskForm from "@/Components/form/page"
 import Link from "next/link"
 import useTaskManager from "@/hooks/use-task-manager"
 
