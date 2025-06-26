@@ -1,9 +1,12 @@
 "use client"
 import type React from "react"
 import { useState } from "react"
-import type { TaskFormProps } from "@/types/task"
+import type { Task } from "@/types/task"
 
-
+export interface TaskFormProps {
+  onClose: () => void
+  onSubmit: (task: Omit<Task, "id">) => Promise<any>
+}
 
 const TaskForm: React.FC<TaskFormProps> = ({ onClose, onSubmit }) => {
   const [form, setForm] = useState({ title: "", status: "Not Started", priority: "Low" })
