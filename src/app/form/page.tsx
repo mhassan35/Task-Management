@@ -4,7 +4,6 @@ import { useState } from "react"
 import  { TaskFormProps } from "@/types/task"
 
 
-
 const TaskForm: React.FC<TaskFormProps> = ({ onClose, onSubmit }) => {
   const [form, setForm] = useState({ title: "", status: "Not Started", priority: "Low" })
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -41,7 +40,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ onClose, onSubmit }) => {
 
   return (
     <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex justify-center items-center">
-      <div className="bg-white p-6 rounded-lg w-full max-w-md shadow-xl">
+      {/* <div className="bg-white p-6 rounded-lg w-full max-w-md shadow-xl">
         <h2 className="text-xl font-bold mb-4 text-gray-900">Create New Task</h2>
 
         {error && (
@@ -95,7 +94,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ onClose, onSubmit }) => {
             </button>
           </div>
         </form>
-      </div>
+      </div> */}
     </div>
   )
 }

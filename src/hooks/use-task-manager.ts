@@ -15,7 +15,7 @@ const globalState = {
   listeners: new Set<() => void>(),
 }
 
-// Function to notify all listeners of state changes
+// Function to notify "all listeners of state changes"
 const notifyListeners = () => {
   globalState.listeners.forEach((listener) => listener())
 }
