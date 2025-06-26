@@ -34,7 +34,7 @@
       "id": "003e",
       "title": "Task management work",
       "status": "In Progress",
-      "priority": "High"
+      "priority": "Urgent"
     },
     {
       "id": "0c79",
@@ -274,25 +274,13 @@
       "id": "jj90",
       "title": "Design mobile app UI",
       "status": "In Progress",
-      "priority": "Urgent"
+      "priority": "High"
     },
     {
       "id": "kk01",
       "title": "Monitor traffic logs",
       "status": "Active",
       "priority": "Urgent"
-    },
-    {
-      "id": "2f6d",
-      "title": "Workking",
-      "status": "Active",
-      "priority": "High"
-    },
-    {
-      "id": "4585",
-      "title": "My Work",
-      "status": "Not Started",
-      "priority": "Low"
     }
   ]
 }
