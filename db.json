@@ -1,12 +1,6 @@
 {
   "fakedata": [
     {
-      "id": "24d8",
-      "title": "Hire UX designer",
-      "status": "In Progress",
-      "priority": "High"
-    },
-    {
       "id": "9a91",
       "title": "Conduct market research",
       "status": "Not Started",
