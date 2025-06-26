@@ -99,13 +99,8 @@ const ListView: React.FC<ListViewProps> = ({
                       <PriorityBadge priority={task.priority} />
                     </td>
                     <td className="px-4 py-3 whitespace-nowrap w-[20%] relative">
-                      <button
-                        onClick={() => setOpenDropdownIndex(openDropdownIndex === index ? null : index)}
-                        aria-haspopup="true"
-                        aria-expanded={openDropdownIndex === index}
-                        aria-label="Actions menu"
-                        className="p-2 text-gray-600 hover:bg-gray-100 rounded-md transition"
-                      >
+                      <button onClick={() => setOpenDropdownIndex(openDropdownIndex === index ? null : index)}
+                        aria-expanded={openDropdownIndex === index} className="p-2 text-gray-600 hover:bg-gray-100 rounded-md transition cursor-pointer ">
                         <HiDotsVertical size={20} />
                       </button>
 
@@ -116,13 +111,13 @@ const ListView: React.FC<ListViewProps> = ({
                               setEditingTask(task)
                               setOpenDropdownIndex(null)
                             }}
-                            className="block w-full text-left px-3 py-2 hover:bg-gray-100 rounded-md"
+                            className="block w-full cursor-pointer text-left px-3 py-2 hover:bg-gray-100 rounded-md"
                           >
                             Edit Task
                           </button>
                           <button
                             onClick={() => handleDelete(task)}
-                            className="block w-full text-left px-3 py-2 text-red-600 hover:bg-red-50 rounded-md"
+                            className="block w-full text-left cursor-pointer px-3 py-2 text-red-600 hover:bg-red-50 rounded-md"
                           >
                             Delete
                           </button>

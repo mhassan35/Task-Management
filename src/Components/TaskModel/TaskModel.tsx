@@ -72,19 +72,14 @@ const TaskModal: React.FC<TaskModalProps> = ({ mode, initialData, onSubmit, onCl
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block mb-1 text-gray-700 font-medium">Task Title</label>
-            <input
-              type="text"
-              value={form.title}
-              onChange={handleChange("title")}
-              className="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-              required
-              disabled={isSubmitting}
-            />
+            <input type="text" placeholder="Task title..." value={form.title} onChange={handleChange("title")}
+              className="w-full border border-gray-300 px-3 py-2 rounded-md outline-none"
+              required disabled={isSubmitting} />
           </div>
 
           <div>
             <label className="block mb-1 text-gray-700 font-medium">Status</label>
-            <select value={form.status} onChange={handleChange("status")} className="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+            <select value={form.status} onChange={handleChange("status")} className="w-full border border-gray-300 px-3 py-2 rounded-md outline-none"
               disabled={isSubmitting}
             >
               {statusOptions.map((status) => (
@@ -100,7 +95,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ mode, initialData, onSubmit, onCl
             <select
               value={form.priority}
               onChange={handleChange("priority")}
-              className="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="w-full border border-gray-300 px-3 py-2 rounded-md outline-none"
               disabled={isSubmitting}
             >
               {priorityOptions.map((priority) => (
@@ -112,19 +107,12 @@ const TaskModal: React.FC<TaskModalProps> = ({ mode, initialData, onSubmit, onCl
           </div>
 
           <div className="flex justify-end gap-3 pt-4">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50"
-              disabled={isSubmitting}
-            >
+            <button type="button" onClick={onClose} className="px-4 py-2 text-gray-600 border border-gray-300 rounded-md cursor-pointer hover:bg-gray-50"
+              disabled={isSubmitting}>
               Cancel
             </button>
-            <button
-              type="submit"
-              className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:opacity-50"
-              disabled={isSubmitting}
-            >
+            <button type="submit" className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:opacity-50 cursor-pointer "
+              disabled={isSubmitting} >
               {isSubmitting ? (mode === "create" ? "Creating..." : "Saving...") : mode === "create" ? "Create Task" : "Save Changes"}
             </button>
           </div>
