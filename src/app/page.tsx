@@ -1,6 +1,6 @@
 "use client"
-import MainSection from "@/Components/layoutPage/main-section"
-import NavBar from "@/Components/navigation/navbar"
+import MainSection from "@/Components/layoutPage/MainSection"
+import NavBar from "@/Components/Navigation/NavBar"
 
 export default function Home(){
   return (

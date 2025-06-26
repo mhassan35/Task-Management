@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { useEffect, useState, useCallback } from "react"
-import type { Task } from "@/types/task"
+import type { Task } from "@/types/TaskType"
 
 const API_BASE = "http://localhost:3000/fakedata"
 

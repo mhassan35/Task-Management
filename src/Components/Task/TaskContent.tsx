@@ -4,7 +4,7 @@ import { useSearchParams } from "next/navigation"
 import { DragDropContext, type DropResult } from "@hello-pangea/dnd"
 import KanbanView from "@/app/kanbanview/page"
 import ListView from "@/app/listview/page"
-import useTaskManager from "@/hooks/use-task-manager"
+import useTaskManager from "@/hooks/UseTaskManager"
 
 const TaskContent = () => {
   const searchParams = useSearchParams()

@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { Droppable, Draggable } from "@hello-pangea/dnd"
-import { KanbanViewProps, getStatusClasses, getPriorityClasses } from "@/types/task"
+import { KanbanViewProps, getStatusClasses, getPriorityClasses } from "@/types/TaskType"
 
 const priorities = ["Low", "Medium", "High", "Urgent"]
 

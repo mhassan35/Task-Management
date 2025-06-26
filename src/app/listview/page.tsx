@@ -3,7 +3,7 @@
 import type React from "react"
 import { useState } from "react"
 import { HiDotsVertical } from "react-icons/hi"
-import type { Task, ListViewProps } from "@/types/task"
+import type { Task, ListViewProps } from "@/types/TaskType"
 
 const getStatusClasses = (status = "") => {
   switch (status.toLowerCase()) {

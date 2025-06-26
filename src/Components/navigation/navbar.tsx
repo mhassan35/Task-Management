@@ -5,7 +5,7 @@ import { RiDeleteBin6Line, RiKanbanView2 } from "react-icons/ri"
 import { FaListUl } from "react-icons/fa"
 import TaskForm from "@/app/form/page"
 import Link from "next/link"
-import useTaskManager from "@/hooks/use-task-manager"
+import useTaskManager from "@/hooks/UseTaskManager"
 
 const NavBar = () => {
   const router = useRouter()

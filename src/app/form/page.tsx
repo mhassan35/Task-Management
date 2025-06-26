@@ -1,7 +1,7 @@
 "use client"
 import type React from "react"
 import { useState } from "react"
-import  { TaskFormProps } from "@/types/task"
+import  { TaskFormProps } from "@/types/TaskType"
 
 
 
