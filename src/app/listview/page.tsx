@@ -237,7 +237,7 @@ const ListView: React.FC<ListViewProps> = ({
               <div className="flex justify-end gap-2 pt-4">
                 <button type="button"
                   onClick={cancelEdit}
-                  className="px-4 py-2 text-gray-600  border-gray-300 rounded-md hover:bg-gray-50"
+                  className="px-4 py-2 text-gray-600 cursor-pointer border-gray-300 rounded-md hover:bg-gray-50"
                 >
                   Cancel
                 </button>
