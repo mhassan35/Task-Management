@@ -3,6 +3,7 @@ export interface Task {
   title: string
   status: string
   priority: string
+  tasks: string
 }
 
 export interface KanbanViewProps {
@@ -12,12 +13,11 @@ export interface KanbanViewProps {
 }
 
 export interface ListViewProps {
-  tasks: Task[]
   filteredTasks: Task[]
   selectedTaskIds: number[]
   setSelectedTaskIds: React.Dispatch<React.SetStateAction<number[]>>
-  handleDeleteTask: (id: number) => Promise<void>
-  handleEditTask: (id: number, updatedTask: Partial<Task>) => Promise<Task>
+  handleDeleteTask: (id: number) => Promise<void> | void
+  handleEditTask: (id: number, data: Partial<Task>) => void | Promise<Task>
 }
 
 export interface TaskFormProps {

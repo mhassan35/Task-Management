@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from "react"
 import { HiDotsVertical } from "react-icons/hi"
-import { Task } from "@/types/TaskType"
+import { Task } from "@/types/Type"
 
 interface TaskActionsMenuProps {
   task: Task

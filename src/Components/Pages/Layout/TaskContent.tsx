@@ -2,25 +2,16 @@
 
 import { useSearchParams } from "next/navigation"
 import { DragDropContext, type DropResult } from "@hello-pangea/dnd"
-import KanbanView from "@/app/kanbanview/page"
-import ListView from "@/app/listview/page"
+import KanbanView from "@/Components/Pages/KanbanView/Kanban"
+import ListView from "@/Components/Pages/ListView/List"
 import useTaskManager from "@/hooks/UseTaskManager"
-import type { Task } from "@/types/TaskType"
-import TaskModal from "@/Components/ui/taskModel/TaskModel"
+import type { Task } from "@/types/Type"
+import TaskModal from "@/Components/Ui/TaskModel/TaskModel"
 import { useState } from "react"
 
 const TaskContent = () => {
   const searchParams = useSearchParams()
-  const {
-    tasks,
-    loading,
-    error,
-    handleDragEnd,
-    selectedTaskIds,
-    setSelectedTaskIds,
-    handleDeleteTask,
-    handleEditTask,
-  } = useTaskManager()
+  const { tasks, loading, error, handleDragEnd, handleEditTask } = useTaskManager()
 
   const activeView = searchParams.get("view") || "list"
   const searchQuery = searchParams.get("search") || ""
@@ -85,21 +76,12 @@ const TaskContent = () => {
     <>
       {activeView === "kanban" ? (
         <DragDropContext onDragEnd={onDragEnd}>
-          <KanbanView
-            filteredTasks={filteredTasks}
-            handleEditTask={handleEdit}
-            handleDeleteTask={handleDeleteTask}
-          />
+          
+          <KanbanView filteredTasks={filteredTasks} onEditTask={handleEdit} />
         </DragDropContext>
       ) : (
-        <ListView
-          filteredTasks={filteredTasks}
-          selectedTaskIds={selectedTaskIds}
-          setSelectedTaskIds={setSelectedTaskIds}
-          handleDeleteTask={handleDeleteTask}
-          handleEditTask={handleEditTask}
-          tasks={tasks}
-        />
+      <ListView filteredTasks={filteredTasks} handleEditTask={handleEditTask}  />
+
       )}
 
       {editingTask && (
