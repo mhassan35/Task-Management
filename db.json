@@ -1,36 +1,6 @@
 {
   "fakedata": [
     {
-      "id": "9a91",
-      "title": "Conduct market research",
-      "status": "Not Started",
-      "priority": "Low"
-    },
-    {
-      "id": "e213",
-      "title": "Lab Repairing Work",
-      "status": "Active",
-      "priority": "Urgent"
-    },
-    {
-      "id": "9684",
-      "title": "Computer Reapring",
-      "status": "In Progress",
-      "priority": "Medium"
-    },
-    {
-      "id": "e799",
-      "title": "Form popup work",
-      "status": "Active",
-      "priority": "Low"
-    },
-    {
-      "id": "e71f",
-      "title": "Mobile Repairing",
-      "status": "Active",
-      "priority": "Urgent"
-    },
-    {
       "id": "003e",
       "title": "Task management work",
       "status": "In Progress",
@@ -46,13 +16,7 @@
       "id": "1836",
       "title": "Cleaning",
       "status": "In Progress",
-      "priority": "Medium"
-    },
-    {
-      "id": "a12b",
-      "title": "Handling",
-      "status": "Active",
-      "priority": "Medium"
+      "priority": "High"
     },
     {
       "id": "f121",
@@ -62,7 +26,7 @@
     },
     {
       "id": "c234",
-      "title": "Client feedback review",
+      "title": "Client feedback ",
       "status": "Not Started",
       "priority": "Medium"
     },
@@ -76,7 +40,7 @@
       "id": "b456",
       "title": "Onboard new intern",
       "status": "Active",
-      "priority": "Low"
+      "priority": "Medium"
     },
     {
       "id": "a678",
@@ -89,12 +53,6 @@
       "title": "Bug fixing sprint",
       "status": "In Progress",
       "priority": "Urgent"
-    },
-    {
-      "id": "f890",
-      "title": "Create dashboard report",
-      "status": "Not Started",
-      "priority": "Low"
     },
     {
       "id": "g901",
@@ -202,7 +160,7 @@
       "id": "x678",
       "title": "Push code to Git",
       "status": "Completed",
-      "priority": "Medium"
+      "priority": "Low"
     },
     {
       "id": "y789",
@@ -285,12 +243,6 @@
     {
       "id": "6031",
       "title": "Computer Task",
-      "status": "In Progress",
-      "priority": "High"
-    },
-    {
-      "id": "c1b3",
-      "title": "Remove Data",
       "status": "In Progress",
       "priority": "High"
     }

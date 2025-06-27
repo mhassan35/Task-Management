@@ -14,37 +14,32 @@ const globalState = {
   listeners: new Set<() => void>(),
 }
 
-// Notify all subscribers of state change
 const notifyListeners = () => {
   globalState.listeners.forEach((listener) => listener())
 }
 
 export default function useTaskManager() {
-  const [updateTrigger, setUpdateTrigger] = useState(0)
+  const [, setUpdate] = useState(0)
+  const triggerUpdate = useCallback(() => setUpdate((u) => u + 1), [])
 
-  const triggerUpdate = useCallback(() => {
-    setUpdateTrigger((prev) => prev + 1)
-  }, [])
+ useEffect(() => {
+  globalState.listeners.add(triggerUpdate)
+  return () => {
+    globalState.listeners.delete(triggerUpdate) 
+  }
+}, [triggerUpdate])
 
-  useEffect(() => {
-    globalState.listeners.add(triggerUpdate)
-    return () => {
-      globalState.listeners.delete(triggerUpdate)
-    }
-  }, [triggerUpdate])
 
-  // Fetch all tasks
   const fetchTasks = useCallback(async () => {
-    try {
-      globalState.loading = true
-      globalState.error = null
-      notifyListeners()
+    globalState.loading = true
+    globalState.error = null
+    notifyListeners()
 
+    try {
       const data = await apiRequest<Task[]>(API_BASE)
       globalState.tasks = Array.isArray(data) ? data : []
     } catch (err) {
-      globalState.error =
-        err instanceof Error ? err.message : "Failed to fetch tasks"
+      globalState.error = err instanceof Error ? err.message : "Failed to fetch tasks"
       globalState.tasks = []
     } finally {
       globalState.loading = false
@@ -53,12 +48,11 @@ export default function useTaskManager() {
   }, [])
 
   useEffect(() => {
-    if (globalState.tasks.length === 0 && !globalState.error && globalState.loading) {
+    if (!globalState.tasks.length && !globalState.error && globalState.loading) {
       fetchTasks()
     }
   }, [fetchTasks])
 
-  // Add new task
   const handleAddTask = useCallback(async (task: Omit<Task, "id">) => {
     try {
       const newTask = await apiRequest<Task>(API_BASE, {
@@ -77,20 +71,17 @@ export default function useTaskManager() {
     }
   }, [])
 
-  // Edit task
-  const handleEditTask = useCallback(async (id: number, updatedTask: Partial<Task>) => {
+  const handleEditTask = useCallback(async (id: number, updated: Partial<Task>) => {
     try {
-      const updated = await apiRequest<Task>(`${API_BASE}/${id}`, {
+      const updatedTask = await apiRequest<Task>(`${API_BASE}/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedTask),
+        body: JSON.stringify(updated),
       })
-      globalState.tasks = globalState.tasks.map((task) =>
-        task.id === id ? updated : task,
-      )
+      globalState.tasks = globalState.tasks.map((t) => t.id === id ? updatedTask : t)
       globalState.error = null
       notifyListeners()
-      return updated
+      return updatedTask
     } catch (err) {
       globalState.error = err instanceof Error ? err.message : "Failed to update task"
       notifyListeners()
@@ -98,12 +89,11 @@ export default function useTaskManager() {
     }
   }, [])
 
-  // Delete task by ID
   const handleDeleteTask = useCallback(async (id: number) => {
     try {
       await apiRequest(`${API_BASE}/${id}`, { method: "DELETE" })
-      globalState.tasks = globalState.tasks.filter((task) => task.id !== id)
-      globalState.selectedTaskIds = globalState.selectedTaskIds.filter((taskId) => taskId !== id)
+      globalState.tasks = globalState.tasks.filter((t) => t.id !== id)
+      globalState.selectedTaskIds = globalState.selectedTaskIds.filter((tid) => tid !== id)
       globalState.error = null
       notifyListeners()
     } catch (err) {
@@ -113,16 +103,11 @@ export default function useTaskManager() {
     }
   }, [])
 
-  // Delete all selected tasks
   const handleDeleteSelectedTasks = useCallback(async () => {
+    const ids = [...globalState.selectedTaskIds]
     try {
-      const ids = [...globalState.selectedTaskIds]
-      await Promise.all(
-        ids.map((id) =>
-          apiRequest(`${API_BASE}/${id}`, { method: "DELETE" }),
-        ),
-      )
-      globalState.tasks = globalState.tasks.filter((task) => !ids.includes(task.id))
+      await Promise.all(ids.map((id) => apiRequest(`${API_BASE}/${id}`, { method: "DELETE" })))
+      globalState.tasks = globalState.tasks.filter((t) => !ids.includes(t.id))
       globalState.selectedTaskIds = []
       globalState.error = null
       notifyListeners()
@@ -133,42 +118,34 @@ export default function useTaskManager() {
     }
   }, [])
 
-  // Drag and drop update
-  const handleDragEnd = useCallback(
-    async (taskId: number, newPriority: string) => {
-      try {
-        // Optimistic update
-        globalState.tasks = globalState.tasks.map((task) =>
-          task.id === taskId ? { ...task, priority: newPriority } : task,
-        )
-        notifyListeners()
+  const handleDragEnd = useCallback(async (taskId: number, newPriority: string) => {
+    globalState.tasks = globalState.tasks.map((t) =>
+      t.id === taskId ? { ...t, priority: newPriority } : t,
+    )
+    notifyListeners()
 
-        await apiRequest(`${API_BASE}/${taskId}`, {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ priority: newPriority }),
-        })
+    try {
+      await apiRequest(`${API_BASE}/${taskId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ priority: newPriority }),
+      })
+      globalState.error = null
+      notifyListeners()
+    } catch {
+      globalState.error = "Failed to update task priority"
+      notifyListeners()
+      await fetchTasks()
+    }
+  }, [fetchTasks])
 
-        globalState.error = null
-        notifyListeners()
-      } catch (err) {
-        globalState.error = "Failed to update task priority"
-        notifyListeners()
-        await fetchTasks()
-      }
-    },
-    [fetchTasks],
-  )
-
-  // Select task IDs
   const setSelectedTaskIds = useCallback((updater: React.SetStateAction<number[]>) => {
     globalState.selectedTaskIds =
-      typeof updater === "function"
-        ? updater(globalState.selectedTaskIds)
-        : updater
+      typeof updater === "function" ? updater(globalState.selectedTaskIds) : updater
     notifyListeners()
   }, [])
 
+  
   return {
     tasks: globalState.tasks,
     selectedTaskIds: globalState.selectedTaskIds,

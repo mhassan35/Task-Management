@@ -1,11 +1,11 @@
 "use client"
 
 import React, { useState } from "react"
-import { HiDotsVertical } from "react-icons/hi"
-import type { Task, ListViewProps } from "@/types/TaskType"
-import TaskModal from "@/Components/TaskModel/TaskModel"
-import StatusBadge from "@/Components/StatusAndPriority/StatusBadge"
-import PriorityBadge from "@/Components/StatusAndPriority/PriorityBadge"
+import { Task, ListViewProps } from "@/types/TaskType"
+import TaskModal from "@/Components/ui/taskModel/TaskModel"
+import StatusBadge from "@/Components/ui/statusAndPriority/StatusBadge"
+import PriorityBadge from "@/Components/ui/statusAndPriority/PriorityBadge"
+import TaskActionsMenu from "@/Components/ui/actionsButton/ActionButton"
 
 const ListView: React.FC<ListViewProps> = ({
   filteredTasks,
@@ -14,7 +14,6 @@ const ListView: React.FC<ListViewProps> = ({
   handleDeleteTask,
   handleEditTask,
 }) => {
-  const [openDropdownIndex, setOpenDropdownIndex] = useState<number | null>(null)
   const [editingTask, setEditingTask] = useState<Task | null>(null)
 
   const safeFilteredTasks = Array.isArray(filteredTasks) ? filteredTasks : []
@@ -44,105 +43,71 @@ const ListView: React.FC<ListViewProps> = ({
     if (!task?.id) return
     try {
       await handleDeleteTask(task.id)
-      setOpenDropdownIndex(null)
     } catch (err) {
       console.error("Failed to delete task:", err)
     }
   }
 
   return (
-    <section className="py-4">
-      <div className="container mx-auto px-2 max-w-full">
-        <h2 className="text-2xl font-bold mb-4">Task List</h2>
+    <section className="py-4 relative">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 className="text-2xl font-medium text-gray-800 mb-2">Task List</h2>
 
         {safeFilteredTasks.length === 0 ? (
-          <div className="text-center py-8 text-gray-500">
+          <div className="text-center text-gray-800 py-10">
             No tasks found. Create your first task to get started!
           </div>
         ) : (
-          <div className="overflow-x-auto bg-white rounded-lg shadow">
-            <table className="min-w-full table-auto">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-4 py-3 text-left font-medium text-gray-700 w-[40%]">
-                    <label className="flex items-center cursor-pointer select-none gap-3">
-                      <input type="checkbox" className="w-4 h-4 cursor-pointer"
-                        checked={isAllSelected} onChange={handleSelectAllChange}
-                        aria-label="Select all tasks"/>
-                      Title
+          <div className="overflow-x-auto bg-white rounded-lg relative z-0">
+            <table className="min-w-full text-md font-medium">
+              <thead className="text-left text-gray-800 tracking-wider">
+                <tr className="divide-y divide-gray-100 bg-gray-50 shadow">
+                  <th className="px-4 py-1 w-1/2">
+                    <label className="inline-flex items-center gap-2">
+                      <input type="checkbox" checked={isAllSelected}
+                        onChange={handleSelectAllChange}
+                        className="form-checkbox cursor-pointer h-4 w-4 text-blue-600"/>
+                      <span>Title</span>
                     </label>
                   </th>
-                  <th className="px-5 py-3 text-left font-medium text-gray-700 w-[30%]">Status</th>
-                  <th className="px-5 py-3 text-left font-medium text-gray-700 w-[30%]">Priority</th>
-                  <th className="px-5 py-3 text-left font-medium text-gray-700 w-[30%]">Actions</th>
+                  <th className="px-3 py-1 w-1/5">Status</th>
+                  <th className="px-3 py-1 w-1/4">Priority</th>
+                  <th className="px-3 py-1 w-1/2">Actions</th>
                 </tr>
               </thead>
-              <tbody>
-                {safeFilteredTasks.map((task, index) => (
-                  <tr key={task.id} className="hover:bg-gray-50 transition-colors duration-150">
-                    <td className="px-4 py-3 whitespace-nowrap w-[40%]">
-                      <label className="flex items-center cursor-pointer select-none gap-3">
-                        <input
-                          type="checkbox"
-                          className="w-4 h-4 cursor-pointer"
-                          checked={safeSelectedTaskIds.includes(task.id)}
-                          onChange={() => handleItemChange(task)}
-                          aria-label={`Select task ${task.title}`}
-                        />
-                        <span className="font-medium text-gray-900">{task.title || ""}</span>
-                      </label>
+              <tbody className="divide-y divide-gray-100">
+                {safeFilteredTasks.map((task) => (
+                  <tr key={task.id} className="hover:bg-gray-50">
+                    <td className="px-4 py-3 flex items-center ">
+                      <input type="checkbox" checked={safeSelectedTaskIds.includes(task.id)}
+                        onChange={() => handleItemChange(task)}
+                        className="form-checkbox cursor-pointer h-4 w-4 text-blue-600"/>
+
+                      <span className="px-3 py-1 text-gray-900">{task.title || ""}</span>
                     </td>
-                    <td className="px-4 py-3 whitespace-nowrap w-[20%]">
+                    <td className="px-[10px] py-1">
                       <StatusBadge status={task.status} />
                     </td>
-                    <td className="px-4 py-3 whitespace-nowrap w-[20%]">
+                    <td className="px-3 py-1">
                       <PriorityBadge priority={task.priority} />
                     </td>
-                    <td className="px-4 py-3 whitespace-nowrap w-[20%] relative">
-                      <button onClick={() => setOpenDropdownIndex(openDropdownIndex === index ? null : index)}
-                        aria-expanded={openDropdownIndex === index} className="p-2 text-gray-600 hover:bg-gray-100 rounded-md transition cursor-pointer ">
-                        <HiDotsVertical size={20} />
-                      </button>
-
-                      {openDropdownIndex === index && (
-                        <div className="absolute right-4 top-12 w-32 bg-white rounded-md shadow-lg z-10">
-                          <button
-                            onClick={() => {
-                              setEditingTask(task)
-                              setOpenDropdownIndex(null)
-                            }}
-                            className="block w-full cursor-pointer text-left px-3 py-2 hover:bg-gray-100 rounded-md"
-                          >
-                            Edit Task
-                          </button>
-                          <button
-                            onClick={() => handleDelete(task)}
-                            className="block w-full text-left cursor-pointer px-3 py-2 text-red-600 hover:bg-red-50 rounded-md"
-                          >
-                            Delete
-                          </button>
-                        </div>
-                      )}
+                    <td className="px-3 py-1" >
+                      <TaskActionsMenu task={task} onEdit={(task) => setEditingTask(task)}
+                        onDelete={handleDelete} />
                     </td>
                   </tr>
                 ))}
               </tbody>
-
             </table>
           </div>
         )}
 
-        {/* Edit Modal using reusable TaskModal */}
         {editingTask && (
-          <TaskModal
-            mode="edit"
-            initialData={editingTask}
-            onSubmit={async (formData) => {
+          <TaskModal mode="edit" initialData={editingTask} onSubmit={async (formData) => {
               await handleEditTask(editingTask.id, formData)
               setEditingTask(null)
             }}
-            onClose={() => setEditingTask(null)}
-          />
+            onClose={() => setEditingTask(null)} />
         )}
       </div>
     </section>

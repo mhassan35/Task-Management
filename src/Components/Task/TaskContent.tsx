@@ -5,10 +5,19 @@ import { DragDropContext, type DropResult } from "@hello-pangea/dnd"
 import KanbanView from "@/app/kanbanview/page"
 import ListView from "@/app/listview/page"
 import useTaskManager from "@/hooks/UseTaskManager"
+import type { Task } from "@/types/TaskType"
+import TaskModal from "@/Components/ui/taskModel/TaskModel"
+import { useState } from "react"
 
 const TaskContent = () => {
   const searchParams = useSearchParams()
-  const { tasks, loading, error, handleDragEnd, selectedTaskIds, setSelectedTaskIds,
+  const {
+    tasks,
+    loading,
+    error,
+    handleDragEnd,
+    selectedTaskIds,
+    setSelectedTaskIds,
     handleDeleteTask,
     handleEditTask,
   } = useTaskManager()
@@ -17,6 +26,8 @@ const TaskContent = () => {
   const searchQuery = searchParams.get("search") || ""
   const selectedStatus = searchParams.get("status") || ""
   const selectedPriority = searchParams.get("priority") || ""
+
+  const [editingTask, setEditingTask] = useState<Task | null>(null)
 
   const filteredTasks = tasks.filter((task) => {
     const title = task.title || ""
@@ -42,6 +53,17 @@ const TaskContent = () => {
     await handleDragEnd(draggedTask.id, destPriority)
   }
 
+  const handleEdit = (task: Task) => {
+    setEditingTask(task)
+  }
+
+  const handleModalSubmit = async (formData: Partial<Task>) => {
+    if (editingTask) {
+      await handleEditTask(editingTask.id, formData)
+      setEditingTask(null)
+    }
+  }
+
   if (loading) {
     return (
       <div className="flex justify-center items-center p-8">
@@ -59,19 +81,36 @@ const TaskContent = () => {
     )
   }
 
-  return activeView === "kanban" ? (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <KanbanView filteredTasks={filteredTasks} />
-    </DragDropContext>
-  ) : (
-    <ListView
-      filteredTasks={filteredTasks}
-      selectedTaskIds={selectedTaskIds}
-      setSelectedTaskIds={setSelectedTaskIds}
-      handleDeleteTask={handleDeleteTask}
-      handleEditTask={handleEditTask}
-      tasks={tasks}
-    />
+  return (
+    <>
+      {activeView === "kanban" ? (
+        <DragDropContext onDragEnd={onDragEnd}>
+          <KanbanView
+            filteredTasks={filteredTasks}
+            handleEditTask={handleEdit}
+            handleDeleteTask={handleDeleteTask}
+          />
+        </DragDropContext>
+      ) : (
+        <ListView
+          filteredTasks={filteredTasks}
+          selectedTaskIds={selectedTaskIds}
+          setSelectedTaskIds={setSelectedTaskIds}
+          handleDeleteTask={handleDeleteTask}
+          handleEditTask={handleEditTask}
+          tasks={tasks}
+        />
+      )}
+
+      {editingTask && (
+        <TaskModal
+          mode="edit"
+          initialData={editingTask}
+          onSubmit={handleModalSubmit}
+          onClose={() => setEditingTask(null)}
+        />
+      )}
+    </>
   )
 }
 
