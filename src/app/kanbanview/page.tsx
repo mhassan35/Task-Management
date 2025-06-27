@@ -1,100 +1,110 @@
 "use client"
 
-import type React from "react"
+import React from "react"
 import { Droppable, Draggable } from "@hello-pangea/dnd"
-import { KanbanViewProps, getStatusClasses, getPriorityClasses } from "@/types/TaskType"
+import { KanbanViewProps } from "@/types/TaskType"
+import StatusBadge from "@/Components/ui/statusAndPriority/StatusBadge"
+import PriorityBadge from "@/Components/ui/statusAndPriority/PriorityBadge"
+import TaskActionsMenu from "@/Components/ui/actionsButton/ActionButton"
 
 const priorities = ["Low", "Medium", "High", "Urgent"]
 
-const KanbanView: React.FC<KanbanViewProps> = ({ filteredTasks }) => (
-  <section className="p-4">
-    <h2 className="text-2xl font-bold mb-6">Kanban View</h2>
+const KanbanView: React.FC<KanbanViewProps> = ({
+  filteredTasks,
+  handleEditTask,
+  handleDeleteTask,
+}) => {
+  const handleDelete = async (task: any) => {
+    if (!task?.id) return
+    try {
+      await handleDeleteTask(task.id)
+    } catch (err) {
+      console.error("Failed to delete task:", err)
+    }
+  }
 
-    {filteredTasks.length === 0 ? (
-      <div className="text-center py-8 border">No tasks found. Create your first task to get started!</div>
-    ) : (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {priorities.map((priority) => {
-          const priorityTasks = filteredTasks.filter(
-            (task) => (task.priority || "").toLowerCase() === priority.toLowerCase(),
-          )
+  return (
+    <section className="px-4 sm:px-6 lg:px-8 py-4">
+      <h2 className="text-2xl font-medium text-gray-800 mb-2">Kanban View</h2>
 
-          return (
-            <Droppable droppableId={priority} key={priority}>
-              {(provided, snapshot) => (
-                <div
-                  ref={provided.innerRef}
-                  {...provided.droppableProps}
-                  className={`bg-white border border-gray-300 p-4 rounded-lg min-h-[500px] transition-colors ${
-                    snapshot.isDraggingOver ? "bg-blue-100 " : ""
-                  }`}
-                >
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-gray-800">{priority}</h3>
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${getPriorityClasses(priority)}`}>
-                      {priorityTasks.length}
-                    </span>
-                  </div>
+      {filteredTasks.length === 0 ? (
+        <div className="text-center py-10 border rounded-md text-gray-500">
+          No tasks found. Create your first task to get started!
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+          {priorities.map((priority) => {
+            const priorityTasks = filteredTasks.filter(
+              (task) => (task.priority || "").toLowerCase() === priority.toLowerCase()
+            )
 
-                  <div className="space-y-3">
-                    {priorityTasks.map((task, index) => (
-                      <Draggable draggableId={task.id.toString()} index={index} key={task.id}>
-                        {(provided, snapshot) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            className={`bg-white p-4 rounded-lg shadow-sm border border-gray-300 transition-all cursor-grab active:cursor-grabbing ${
-                              snapshot.isDragging
-                                ? "shadow-lg ring-2 ring-blue-200 rotate-2 scale-105"
-                                : "hover:shadow-md"
-                            }`}
-                          >
-                            <h4 className="font-semibold text-gray-900 mb-3 line-clamp-2">{task.title}</h4>
+            return (
+              <Droppable droppableId={priority} key={priority}>
+                {(provided, snapshot) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                    className={`bg-white border border-gray-200 rounded-lg p-4 min-h-[400px] sm:min-h-[500px] transition ${
+                      snapshot.isDraggingOver ? "bg-blue-50" : ""
+                    }`}>
+                    <div className="flex justify-between items-center mb-4">
+                      <h3 className="text-lg font-semibold text-gray-700">{priority}</h3>
+                      <span className="text-xs text-gray-500">{priorityTasks.length}</span>
+                    </div>
 
-                            <div className="flex flex-col gap-2">
-                              <div className="flex items-center">
-                                <span className="text-xs mr-2">Status:</span>
-                                <span
-                                  className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusClasses(task.status)}`}
-                                >
-                                  {task.status}
-                                </span>
+                    <div className="space-y-3">
+                      {priorityTasks.map((task, index) => (
+                        <Draggable draggableId={task.id.toString()} index={index} key={task.id}>
+                          {(provided, snapshot) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              className={`bg-white p-4 rounded-lg border border-gray-200 shadow-sm transition cursor-grab active:cursor-grabbing ${
+                                snapshot.isDragging
+                                  ? "shadow-lg ring-2 ring-blue-300 scale-[1.02] rotate-1"
+                                  : "hover:shadow-md"
+                              }`}>
+                              <div className="flex justify-between items-start mb-2">
+                                <h4 className="font-semibold text-gray-900 line-clamp-2">
+                                  {task.title}
+                                </h4>
+                                <TaskActionsMenu task={task} onEdit={handleEditTask}
+                                  onDelete={handleDelete}/>
                               </div>
 
-                              <div className="flex items-center">
-                                <span className="text-xs  mr-2">Priority:</span>
-                                <span
-                                  className={`px-2 py-1 rounded-full text-xs font-medium ${getPriorityClasses(task.priority)}`}
-                                >
-                                  {task.priority}
-                                </span>
+                              <div className="flex flex-col gap-2 text-sm">
+                                <div className="flex items-center gap-2">
+                                  <span className="text-gray-500">Status:</span>
+                                  <StatusBadge status={task.status} />
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <span className="text-gray-500">Priority:</span>
+                                  <PriorityBadge priority={task.priority} />
+                                </div>
                               </div>
                             </div>
+                          )}
+                        </Draggable>
+                      ))}
+                    </div>
 
-                           
-                            <div className="mt-3 flex justify-center">
-                              <div className="w-8 h-1 rounded-full"></div>
-                            </div>
-                          </div>
-                        )}
-                      </Draggable>
-                    ))}
+                    {provided.placeholder}
+
+                    {priorityTasks.length === 0 && (
+                      <div className="text-center text-sm text-gray-400 mt-6">
+                        Drop tasks here
+                      </div>
+                    )}
                   </div>
-
-                  {provided.placeholder}
-
-                  {priorityTasks.length === 0 && (
-                    <div className="text-center py-8 text-gray-400 text-sm">Drop tasks here</div>
-                  )}
-                </div>
-              )}
-            </Droppable>
-          )
-        })}
-      </div>
-    )}
-  </section>
-)
+                )}
+              </Droppable>
+            )
+          })}
+        </div>
+      )}
+    </section>
+  )
+}
 
 export default KanbanView

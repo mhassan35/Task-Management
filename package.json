@@ -8,11 +8,11 @@
     "start": "next start",
     "lint": "next lint",
     "server-json": "json-server --watch db.json"
-
   },
   "dependencies": {
     "@hello-pangea/dnd": "^18.0.1",
     "json-server": "^1.0.0-beta.3",
+    "lodash": "^4.17.21",
     "next": "15.3.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
@@ -20,6 +20,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/lodash": "^4.17.19",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

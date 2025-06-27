@@ -1,5 +1,5 @@
 import SearchFilters from "@/Components/Search/SearchFilters"
-import TaskContent from "@/Components/Task/TaskContent"
+import TaskContent from "@/Components/task/TaskContent"
 
 const MainSection = () => {
   return (
