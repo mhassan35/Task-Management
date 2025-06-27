@@ -19,7 +19,7 @@ const notifyListeners = () => {
 }
 
 export default function useTaskManager() {
-  const [, setUpdate] = useState(0)
+  const [update, setUpdate] = useState(0)
   const triggerUpdate = useCallback(() => setUpdate((u) => u + 1), [])
 
  useEffect(() => {

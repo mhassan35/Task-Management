@@ -13,6 +13,8 @@ export async function apiRequest<T>(
         `API error! Status: ${response.status} - ${errorMessage}`
       )
     }
+    console.log(response);
+    
 
     // If response is JSON, parse it
     if (contentType.includes("application/json")) {
