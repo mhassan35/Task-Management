@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState, useCallback } from "react"
-import type { Task } from "@/types/TaskType"
+import type { Task } from "@/types/Type"
 import { apiRequest } from "@/lib/api"
 
 const API_BASE = "http://localhost:3000/fakedata"

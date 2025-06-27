@@ -1,22 +1,11 @@
 {
   "fakedata": [
     {
-      "id": "003e",
-      "title": "Task management work",
-      "status": "In Progress",
-      "priority": "Urgent"
-    },
-    {
-      "id": "0c79",
-      "title": "Complete Working",
-      "status": "Not Started",
-      "priority": "High"
-    },
-    {
       "id": "1836",
-      "title": "Cleaning",
+      "title": "Cleaning Work",
       "status": "In Progress",
-      "priority": "High"
+      "priority": "High",
+      "tasks": "hh"
     },
     {
       "id": "f121",
@@ -26,21 +15,15 @@
     },
     {
       "id": "c234",
-      "title": "Client feedback ",
+      "title": "Client Work",
       "status": "Not Started",
-      "priority": "Medium"
+      "priority": "Low"
     },
     {
       "id": "d322",
       "title": "Develop landing page",
       "status": "In Progress",
       "priority": "High"
-    },
-    {
-      "id": "b456",
-      "title": "Onboard new intern",
-      "status": "Active",
-      "priority": "Medium"
     },
     {
       "id": "a678",
@@ -76,7 +59,7 @@
       "id": "j234",
       "title": "UI review meeting",
       "status": "Completed",
-      "priority": "Low"
+      "priority": "Medium"
     },
     {
       "id": "k345",
@@ -88,7 +71,7 @@
       "id": "l456",
       "title": "Customer survey",
       "status": "Not Started",
-      "priority": "Low"
+      "priority": "Medium"
     },
     {
       "id": "m567",
@@ -166,7 +149,7 @@
       "id": "y789",
       "title": "QA testing",
       "status": "In Progress",
-      "priority": "High"
+      "priority": "Low"
     },
     {
       "id": "z890",
@@ -178,7 +161,7 @@
       "id": "aa01",
       "title": "Vendor coordination",
       "status": "Active",
-      "priority": "Low"
+      "priority": "Medium"
     },
     {
       "id": "bb12",
@@ -214,7 +197,7 @@
       "id": "gg67",
       "title": "Weekly report generation",
       "status": "Completed",
-      "priority": "Medium"
+      "priority": "Low"
     },
     {
       "id": "hh78",
@@ -232,19 +215,26 @@
       "id": "jj90",
       "title": "Design mobile app UI",
       "status": "In Progress",
-      "priority": "High"
+      "priority": "Urgent"
     },
     {
       "id": "kk01",
       "title": "Monitor traffic logs",
       "status": "Active",
-      "priority": "Urgent"
+      "priority": "Low"
     },
     {
-      "id": "6031",
-      "title": "Computer Task",
-      "status": "In Progress",
-      "priority": "High"
+      "id": "66fb",
+      "title": "Gaming",
+      "status": "Not Started",
+      "priority": "Low"
+    },
+    {
+      "id": "5f8b",
+      "title": "task",
+      "status": "Active",
+      "priority": "High",
+      "tasks": ""
     }
   ]
 }
