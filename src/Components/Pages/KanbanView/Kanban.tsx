@@ -2,18 +2,20 @@
 
 import React from "react"
 import { Droppable, Draggable } from "@hello-pangea/dnd"
-import { KanbanViewProps } from "@/types/TaskType"
-import StatusBadge from "@/Components/ui/statusAndPriority/StatusBadge"
-import PriorityBadge from "@/Components/ui/statusAndPriority/PriorityBadge"
-import TaskActionsMenu from "@/Components/ui/actionsButton/ActionButton"
+import { KanbanViewProps } from "@/types/Type"
+import StatusBadge from "@/Components/Ui/StatusAndPriority/StatusBadge"
+import PriorityBadge from "@/Components/Ui/StatusAndPriority/PriorityBadge"
+import TaskActionsMenu from "@/Components/Ui/ActionsButton/ActionButton"
+import useTaskManager from "@/hooks/UseTaskManager"
 
 const priorities = ["Low", "Medium", "High", "Urgent"]
 
-const KanbanView: React.FC<KanbanViewProps> = ({
+const KanbanView: React.FC<Omit<KanbanViewProps, "handleDeleteTask" | "handleEditTask"> & { onEditTask: (task: any) => void }> = ({
   filteredTasks,
-  handleEditTask,
-  handleDeleteTask,
+  onEditTask,
 }) => {
+  const { handleDeleteTask } = useTaskManager()
+
   const handleDelete = async (task: any) => {
     if (!task?.id) return
     try {
@@ -69,8 +71,10 @@ const KanbanView: React.FC<KanbanViewProps> = ({
                                 <h4 className="font-semibold text-gray-900 line-clamp-2">
                                   {task.title}
                                 </h4>
-                                <TaskActionsMenu task={task} onEdit={handleEditTask}
-                                  onDelete={handleDelete}/>
+                                <TaskActionsMenu 
+                                  task={task} 
+                                  onEdit={() => onEditTask(task)}
+                                  onDelete={() => handleDelete(task)} />
                               </div>
 
                               <div className="flex flex-col gap-2 text-sm">

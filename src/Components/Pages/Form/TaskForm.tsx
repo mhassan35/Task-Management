@@ -1,6 +1,6 @@
 import React from "react"
-import TaskModal from "@/Components/ui/taskModel/TaskModel"
-import type { TaskFormProps } from "@/types/TaskType"
+import TaskModal from "@/Components/Ui/TaskModel/TaskModel"
+import type { TaskFormProps } from "@/types/Type"
 
 const TaskForm: React.FC<TaskFormProps> = ({ onClose, onSubmit }) => {
   return (

@@ -1,34 +1,33 @@
 "use client"
 
 import React, { useState } from "react"
-import { Task, ListViewProps } from "@/types/TaskType"
-import TaskModal from "@/Components/ui/taskModel/TaskModel"
-import StatusBadge from "@/Components/ui/statusAndPriority/StatusBadge"
-import PriorityBadge from "@/Components/ui/statusAndPriority/PriorityBadge"
-import TaskActionsMenu from "@/Components/ui/actionsButton/ActionButton"
+import { Task, ListViewProps } from "@/types/Type"
+import TaskModal from "@/Components/Ui/TaskModel/TaskModel"
+import StatusBadge from "@/Components/Ui/StatusAndPriority/StatusBadge"
+import PriorityBadge from "@/Components/Ui/StatusAndPriority/PriorityBadge"
+import TaskActionsMenu from "@/Components/Ui/ActionsButton/ActionButton"
+import useTaskManager from "@/hooks/UseTaskManager"
 
-const ListView: React.FC<ListViewProps> = ({
+
+const ListView: React.FC<Omit<ListViewProps, "selectedTaskIds" | "setSelectedTaskIds" | "handleDeleteTask">> = ({
   filteredTasks,
-  selectedTaskIds,
-  setSelectedTaskIds,
-  handleDeleteTask,
   handleEditTask,
 }) => {
+  const { selectedTaskIds, setSelectedTaskIds, handleDeleteTask } = useTaskManager()
   const [editingTask, setEditingTask] = useState<Task | null>(null)
 
   const safeFilteredTasks = Array.isArray(filteredTasks) ? filteredTasks : []
-  const safeSelectedTaskIds = Array.isArray(selectedTaskIds) ? selectedTaskIds : []
 
   const isAllSelected =
     safeFilteredTasks.length > 0 &&
-    safeFilteredTasks.every((task) => task?.id && safeSelectedTaskIds.includes(task.id))
+    safeFilteredTasks.every((task) => task?.id && selectedTaskIds.includes(task.id))
 
   const handleSelectAllChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const allFilteredTaskIds = safeFilteredTasks.filter((task) => task?.id).map((task) => task.id)
     setSelectedTaskIds(
       e.target.checked
         ? allFilteredTaskIds
-        : safeSelectedTaskIds.filter((id) => !allFilteredTaskIds.includes(id))
+        : selectedTaskIds.filter((id) => !allFilteredTaskIds.includes(id))
     )
   }
 
@@ -64,9 +63,12 @@ const ListView: React.FC<ListViewProps> = ({
                 <tr className="divide-y divide-gray-100 bg-gray-50 shadow">
                   <th className="px-4 py-1 w-1/2">
                     <label className="inline-flex items-center gap-2">
-                      <input type="checkbox" checked={isAllSelected}
+                      <input
+                        type="checkbox"
+                        checked={isAllSelected}
                         onChange={handleSelectAllChange}
-                        className="form-checkbox cursor-pointer h-4 w-4 text-blue-600"/>
+                        className="form-checkbox cursor-pointer h-4 w-4 text-blue-600"
+                      />
                       <span>Title</span>
                     </label>
                   </th>
@@ -79,9 +81,12 @@ const ListView: React.FC<ListViewProps> = ({
                 {safeFilteredTasks.map((task) => (
                   <tr key={task.id} className="hover:bg-gray-50">
                     <td className="px-4 py-3 flex items-center ">
-                      <input type="checkbox" checked={safeSelectedTaskIds.includes(task.id)}
+                      <input
+                        type="checkbox"
+                        checked={selectedTaskIds.includes(task.id)}
                         onChange={() => handleItemChange(task)}
-                        className="form-checkbox cursor-pointer h-4 w-4 text-blue-600"/>
+                        className="form-checkbox cursor-pointer h-4 w-4 text-blue-600"
+                      />
 
                       <span className="px-3 py-1 text-gray-900">{task.title || ""}</span>
                     </td>
@@ -91,9 +96,9 @@ const ListView: React.FC<ListViewProps> = ({
                     <td className="px-3 py-1">
                       <PriorityBadge priority={task.priority} />
                     </td>
-                    <td className="px-3 py-1" >
-                      <TaskActionsMenu task={task} onEdit={(task) => setEditingTask(task)}
-                        onDelete={handleDelete} />
+                    <td className="px-3 py-1">
+                      <TaskActionsMenu task={task} onEdit={(task) => setEditingTask(task)} onDelete={handleDelete}/>
+
                     </td>
                   </tr>
                 ))}
@@ -104,10 +109,9 @@ const ListView: React.FC<ListViewProps> = ({
 
         {editingTask && (
           <TaskModal mode="edit" initialData={editingTask} onSubmit={async (formData) => {
-              await handleEditTask(editingTask.id, formData)
-              setEditingTask(null)
-            }}
-            onClose={() => setEditingTask(null)} />
+            await handleEditTask(editingTask.id, formData)
+            setEditingTask(null)}}
+            onClose={() => setEditingTask(null)}/>
         )}
       </div>
     </section>
