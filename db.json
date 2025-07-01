@@ -1,77 +1,11 @@
 {
   "fakedata": [
     {
-      "id": "1836",
-      "title": "Cleaning Work",
-      "status": "In Progress",
-      "priority": "High",
-      "tasks": "hh"
-    },
-    {
-      "id": "f121",
-      "title": "Database backup",
-      "status": "Completed",
-      "priority": "High"
-    },
-    {
-      "id": "c234",
-      "title": "Client Work",
-      "status": "Not Started",
-      "priority": "Low"
-    },
-    {
-      "id": "d322",
-      "title": "Develop landing page",
-      "status": "In Progress",
-      "priority": "High"
-    },
-    {
-      "id": "a678",
-      "title": "Software update",
-      "status": "Completed",
-      "priority": "Medium"
-    },
-    {
-      "id": "e789",
-      "title": "Bug fixing sprint",
-      "status": "In Progress",
-      "priority": "Urgent"
-    },
-    {
-      "id": "g901",
-      "title": "System audit",
-      "status": "Active",
-      "priority": "High"
-    },
-    {
-      "id": "h012",
-      "title": "Prepare training material",
-      "status": "Not Started",
-      "priority": "Medium"
-    },
-    {
-      "id": "i123",
-      "title": "Website testing",
-      "status": "In Progress",
-      "priority": "High"
-    },
-    {
-      "id": "j234",
-      "title": "UI review meeting",
-      "status": "Completed",
-      "priority": "Medium"
-    },
-    {
-      "id": "k345",
-      "title": "SEO optimization",
-      "status": "In Progress",
-      "priority": "Medium"
-    },
-    {
       "id": "l456",
-      "title": "Customer survey",
+      "title": "Customer",
       "status": "Not Started",
-      "priority": "Medium"
+      "priority": "Medium",
+      "tasks": ""
     },
     {
       "id": "m567",
@@ -95,7 +29,7 @@
       "id": "p890",
       "title": "Design poster",
       "status": "Not Started",
-      "priority": "Low"
+      "priority": "Medium"
     },
     {
       "id": "q901",
@@ -113,7 +47,7 @@
       "id": "s123",
       "title": "Employee survey",
       "status": "Not Started",
-      "priority": "Low"
+      "priority": "Medium"
     },
     {
       "id": "t234",
@@ -143,13 +77,13 @@
       "id": "x678",
       "title": "Push code to Git",
       "status": "Completed",
-      "priority": "Low"
+      "priority": "Medium"
     },
     {
       "id": "y789",
       "title": "QA testing",
       "status": "In Progress",
-      "priority": "Low"
+      "priority": "High"
     },
     {
       "id": "z890",
@@ -160,8 +94,9 @@
     {
       "id": "aa01",
       "title": "Vendor coordination",
-      "status": "Active",
-      "priority": "Medium"
+      "status": "Completed",
+      "priority": "Medium",
+      "tasks": ""
     },
     {
       "id": "bb12",
@@ -173,7 +108,7 @@
       "id": "cc23",
       "title": "Renew domain",
       "status": "Completed",
-      "priority": "Low"
+      "priority": "Urgent"
     },
     {
       "id": "dd34",
@@ -227,13 +162,69 @@
       "id": "66fb",
       "title": "Gaming",
       "status": "Not Started",
-      "priority": "Low"
+      "priority": "High"
     },
     {
-      "id": "5f8b",
-      "title": "task",
-      "status": "Active",
+      "id": "d652",
+      "title": "Management Work",
+      "status": "Not Started",
+      "priority": "Low",
+      "tasks": ""
+    },
+    {
+      "id": "fabb",
+      "title": "created",
+      "status": "Not Started",
+      "priority": "Urgent",
+      "tasks": ""
+    },
+    {
+      "id": "ef40",
+      "title": "worker",
+      "status": "Not Started",
+      "priority": "Low",
+      "tasks": ""
+    },
+    {
+      "id": "b909",
+      "title": "created",
+      "status": "Not Started",
+      "priority": "Low",
+      "tasks": ""
+    },
+    {
+      "id": "e7f6",
+      "title": "My Task updated",
+      "status": "Not Started",
       "priority": "High",
+      "tasks": ""
+    },
+    {
+      "id": "969a",
+      "title": "Checking",
+      "status": "In Progress",
+      "priority": "Medium",
+      "tasks": ""
+    },
+    {
+      "id": "132d",
+      "title": "new tast",
+      "status": "Not Started",
+      "priority": "High",
+      "tasks": ""
+    },
+    {
+      "id": "d9d2",
+      "title": "my data working",
+      "status": "Not Started",
+      "priority": "Urgent",
+      "tasks": ""
+    },
+    {
+      "id": "6149",
+      "title": "Working task",
+      "status": "Not Started",
+      "priority": "Low",
       "tasks": ""
     }
   ]
