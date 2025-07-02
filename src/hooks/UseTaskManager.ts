@@ -19,16 +19,16 @@ const notifyListeners = () => {
   globalState.listeners.forEach((listener) => listener());
 };
 
-export default function useTaskManager() {
-  const [update, setUpdate] = useState(0);
-  const triggerUpdate = useCallback(() => setUpdate((u) => u + 1), []);
+const useTaskManager = () => {
+  const [, forceUpdate] = useState(0);
+  const triggerUIUpdate = useCallback(() => forceUpdate((n) => n + 1), []);
 
   useEffect(() => {
-    globalState.listeners.add(triggerUpdate);
+    globalState.listeners.add(triggerUIUpdate);
     return () => {
-      globalState.listeners.delete(triggerUpdate);
+      globalState.listeners.delete(triggerUIUpdate);
     };
-  }, [triggerUpdate]);
+  }, [triggerUIUpdate]);
 
   const fetchTasks = useCallback(async () => {
     globalState.loading = true;
@@ -36,12 +36,13 @@ export default function useTaskManager() {
     notifyListeners();
 
     try {
-      const data = await apiRequest<Task[]>(API_BASE);
-      globalState.tasks = Array.isArray(data) ? data : [];
-    } catch (err) {
-      globalState.error = err instanceof Error ? err.message : "Failed to fetch tasks";
+      const fetchedTasks = await apiRequest<Task[]>(API_BASE);
+      globalState.tasks = Array.isArray(fetchedTasks) ? fetchedTasks : [];
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Failed to fetch tasks";
+      globalState.error = errorMessage;
       globalState.tasks = [];
-      toast.error(globalState.error);
+      toast.error(errorMessage);
     } finally {
       globalState.loading = false;
       notifyListeners();
@@ -54,82 +55,73 @@ export default function useTaskManager() {
     }
   }, [fetchTasks]);
 
-  const handleAddTask = useCallback(async (task: Omit<Task, "id">) => {
+  const executeApiAction = async <T>(
+    action: () => Promise<T>,
+    successMessage: string
+  ): Promise<T> => {
     try {
-      const newTask = await apiRequest<Task>(API_BASE, {
+      const result = await action();
+      globalState.error = null;
+      toast.success(successMessage);
+      notifyListeners();
+      return result;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Operation failed";
+      globalState.error = errorMessage;
+      toast.error(errorMessage);
+      notifyListeners();
+      throw error;
+    }
+  };
+
+  const handleAddTask = useCallback((newTask: Omit<Task, "id">) =>
+    executeApiAction(async () => {
+      const createdTask = await apiRequest<Task>(API_BASE, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(task),
+        body: JSON.stringify(newTask),
       });
-      globalState.tasks.push(newTask);
-      globalState.error = null;
-      notifyListeners();
-      toast.success("Task created successfully!");
-      return newTask;
-    } catch (err) {
-      globalState.error = err instanceof Error ? err.message : "Failed to add task";
-      toast.error(globalState.error);
-      notifyListeners();
-      throw err;
-    }
-  }, []);
+      globalState.tasks.push(createdTask);
+      return createdTask;
+    }, "Task created successfully!")
+  , []);
 
-  const handleEditTask = useCallback(async (id: number, updated: Partial<Task>) => {
-    try {
-      const updatedTask = await apiRequest<Task>(`${API_BASE}/${id}`, {
+  const handleEditTask = useCallback((taskId: number, updatedFields: Partial<Task>) =>
+    executeApiAction(async () => {
+      const updatedTask = await apiRequest<Task>(`${API_BASE}/${taskId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updated),
+        body: JSON.stringify(updatedFields),
       });
-      globalState.tasks = globalState.tasks.map((t) => (t.id === id ? updatedTask : t));
-      globalState.error = null;
-      notifyListeners();
-      toast.success("Task updated successfully!");
+      globalState.tasks = globalState.tasks.map((task) =>
+        task.id === taskId ? updatedTask : task
+      );
       return updatedTask;
-    } catch (err) {
-      globalState.error = err instanceof Error ? err.message : "Failed to update task";
-      toast.error(globalState.error); 
-      notifyListeners();
-      throw err;
-    }
-  }, []);
+    }, "Task updated successfully!")
+  , []);
 
-  const handleDeleteTask = useCallback(async (id: number) => {
-    try {
-      await apiRequest(`${API_BASE}/${id}`, { method: "DELETE" });
-      globalState.tasks = globalState.tasks.filter((t) => t.id !== id);
-      globalState.selectedTaskIds = globalState.selectedTaskIds.filter((tid) => tid !== id);
-      globalState.error = null;
-      notifyListeners();
-      toast.success("Task deleted successfully!");
-    } catch (err) {
-      globalState.error = err instanceof Error ? err.message : "Failed to delete task";
-      toast.error(globalState.error); 
-      notifyListeners();
-      throw err;
-    }
-  }, []);
+  const handleDeleteTask = useCallback((taskId: number) =>
+    executeApiAction(async () => {
+      await apiRequest(`${API_BASE}/${taskId}`, { method: "DELETE" });
+      globalState.tasks = globalState.tasks.filter((task) => task.id !== taskId);
+      globalState.selectedTaskIds = globalState.selectedTaskIds.filter((id) => id !== taskId);
+    }, "Task deleted successfully!")
+  , []);
 
-  const handleDeleteSelectedTasks = useCallback(async () => {
-    const ids = [...globalState.selectedTaskIds];
-    try {
-      await Promise.all(ids.map((id) => apiRequest(`${API_BASE}/${id}`, { method: "DELETE" })));
-      globalState.tasks = globalState.tasks.filter((t) => !ids.includes(t.id));
+  const handleDeleteSelectedTasks = useCallback(() =>
+    executeApiAction(async () => {
+      const idsToDelete = [...globalState.selectedTaskIds];
+      await Promise.all(idsToDelete.map((id) =>
+        apiRequest(`${API_BASE}/${id}`, { method: "DELETE" })
+      ));
+      globalState.tasks = globalState.tasks.filter((task) => !idsToDelete.includes(task.id));
       globalState.selectedTaskIds = [];
-      globalState.error = null;
-      notifyListeners();
-      toast.success("Selected tasks deleted successfully!"); 
-    } catch (err) {
-      globalState.error = err instanceof Error ? err.message : "Failed to delete selected tasks";
-      toast.error(globalState.error); 
-      notifyListeners();
-      throw err;
-    }
-  }, []);
+    }, "Selected tasks deleted successfully!")
+  , []);
 
   const handleDragEnd = useCallback(async (taskId: number, newPriority: string) => {
-    globalState.tasks = globalState.tasks.map((t) =>
-      t.id === taskId ? { ...t, priority: newPriority } : t
+    globalState.tasks = globalState.tasks.map((task) =>
+      task.id === taskId ? { ...task, priority: newPriority } : task
     );
     notifyListeners();
 
@@ -140,19 +132,20 @@ export default function useTaskManager() {
         body: JSON.stringify({ priority: newPriority }),
       });
       globalState.error = null;
-      notifyListeners();
-      toast.success("Task priority updated successfully!"); 
+      toast.success("Task priority updated successfully!");
     } catch {
       globalState.error = "Failed to update task priority";
       toast.error(globalState.error);
-      notifyListeners();
       await fetchTasks();
+    } finally {
+      notifyListeners();
     }
   }, [fetchTasks]);
 
   const setSelectedTaskIds = useCallback((updater: React.SetStateAction<number[]>) => {
-    globalState.selectedTaskIds =
-      typeof updater === "function" ? updater(globalState.selectedTaskIds) : updater;
+    globalState.selectedTaskIds = typeof updater === "function"
+      ? updater(globalState.selectedTaskIds)
+      : updater;
     notifyListeners();
   }, []);
 
@@ -169,4 +162,6 @@ export default function useTaskManager() {
     handleDragEnd,
     refetch: fetchTasks,
   };
-}
+};
+
+export default useTaskManager;

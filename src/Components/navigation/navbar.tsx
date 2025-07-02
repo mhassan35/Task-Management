@@ -6,6 +6,7 @@ import { FaListUl } from "react-icons/fa"
 import TaskForm from "@/Components/Pages/Form/TaskForm"
 import Link from "next/link"
 import useTaskManager from "@/hooks/UseTaskManager"
+import { toast } from "react-toastify"
 
 const NavBar = () => {
   const router = useRouter()
@@ -34,13 +35,18 @@ const NavBar = () => {
   }
 
   const handleDeleteClick = async () => {
-    if (!selectedTaskIds || selectedTaskIds.length === 0) return
-    try {
-      await handleDeleteSelectedTasks()
-    } catch (error) {
-      console.error("Delete operation failed:", error)
-    }
+  if (!selectedTaskIds || selectedTaskIds.length === 0) {
+    toast.error("Please select at least one task to delete.")
+    return
   }
+
+  try {
+    await handleDeleteSelectedTasks()
+  } catch (error) {
+    toast.error("Failed to delete selected tasks.")
+  }
+}
+
 
   return (
     <nav className="sticky top-0 z-30">
@@ -54,13 +60,8 @@ const NavBar = () => {
 
 
         <div className="flex flex-wrap gap-3">
-          <button onClick={handleDeleteClick} className={`p-3 rounded-full text-white transition-colors duration-300 ${
-              selectedTaskIds && selectedTaskIds.length > 0
-                ? "bg-red-600 hover:bg-red-700 cursor-pointer"
-                : "bg-gray-400 cursor-not-allowed"
-            }`}
-            title={`Delete ${selectedTaskIds?.length || 0} selected task(s)`}
-            disabled={!selectedTaskIds || selectedTaskIds.length === 0}>
+          <button onClick={handleDeleteClick} className="p-3 rounded-full bg-red-500 text-white transition-colors duration-300 cursor-pointer" 
+            title={`Delete ${selectedTaskIds?.length || 0} selected task(s)`}>
             <RiDeleteBin6Line size={20} />
           </button>
 
@@ -80,7 +81,6 @@ const NavBar = () => {
             <FaListUl className="mr-2" />
             List View
           </button>
-
           <button  onClick={() => setActiveView("kanban")} className={`flex font-medium items-center cursor-pointer px-4 py-2 rounded-md transition ${
               activeView === "kanban"
                 ? "bg-white"

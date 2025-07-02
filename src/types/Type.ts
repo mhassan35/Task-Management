@@ -3,7 +3,6 @@ export interface Task {
   title: string
   status: string
   priority: string
-  tasks: string
 }
 
 export interface KanbanViewProps {
