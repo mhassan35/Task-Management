@@ -2,10 +2,10 @@
 
 import React, { useState } from "react"
 import { Task, ListViewProps } from "@/types/Type"
-import TaskModal from "@/Components/Ui/TaskModel/TaskModel"
-import StatusBadge from "@/Components/Ui/StatusAndPriority/StatusBadge"
-import PriorityBadge from "@/Components/Ui/StatusAndPriority/PriorityBadge"
-import TaskActionsMenu from "@/Components/Ui/ActionsButton/ActionButton"
+import TaskModal from "@/Components/ui/taskModel"
+import StatusBadge from "@/Components/ui/statusBadge"
+import PriorityBadge from "@/Components/ui/priorityBadge"
+import TaskActionsMenu from "@/Components/ui/actionButton"
 import useTaskManager from "@/hooks/UseTaskManager"
 
 

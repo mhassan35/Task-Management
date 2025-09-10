@@ -2,11 +2,11 @@
 
 import { useSearchParams } from "next/navigation"
 import { DragDropContext, type DropResult } from "@hello-pangea/dnd"
-import KanbanView from "@/Components/Pages/KanbanView/Kanban"
-import ListView from "@/Components/Pages/ListView/List"
+import KanbanView from "@/Components/Pages/KanbanView"
+import ListView from "@/Components/Pages/ListView"
 import useTaskManager from "@/hooks/UseTaskManager"
 import type { Task } from "@/types/Type"
-import TaskModal from "@/Components/Ui/TaskModel/TaskModel"
+import TaskModal from "@/Components/ui/taskModel"
 import { useState } from "react"
 
 const TaskContent = () => {

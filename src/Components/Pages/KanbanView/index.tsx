@@ -3,9 +3,9 @@
 import React from "react"
 import { Droppable, Draggable } from "@hello-pangea/dnd"
 import { KanbanViewProps } from "@/types/Type"
-import StatusBadge from "@/Components/Ui/StatusAndPriority/StatusBadge"
-import PriorityBadge from "@/Components/Ui/StatusAndPriority/PriorityBadge"
-import TaskActionsMenu from "@/Components/Ui/ActionsButton/ActionButton"
+import StatusBadge from "@/Components/ui/statusBadge"
+import PriorityBadge from "@/Components/ui/priorityBadge"
+import TaskActionsMenu from "@/Components/ui/actionButton"
 import useTaskManager from "@/hooks/UseTaskManager"
 
 const priorities = ["Low", "Medium", "High", "Urgent"]

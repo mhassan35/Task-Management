@@ -2,8 +2,8 @@
 
 import MainSection from "@/Components//Pages/Layout/TaskContent"
 
-import NavBar from "@/Components/Navigation/NavBar"
-import SearchFilters from "@/Components/Pages/Search/SearchFilters"
+import NavBar from "@/Components/navigation"
+import SearchFilters from "@/Components/Pages/Search"
 
 export default function Home() {
   return (

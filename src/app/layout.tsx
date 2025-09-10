@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import ToastContainerWrapper from "@/Components/ui/Notifications/NotificationsBar";
+import ToastContainerWrapper from "@/Components/ui/notificationsBox";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
